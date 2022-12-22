@@ -29,4 +29,19 @@ private static <T> void swap(T[] objects, int i, int j) {
 	
 }
 
+public static <T> int binarySearch(T[] arraySorted, T key, Comparator<T> comp) {
+	int left = 0;
+	int right = arraySorted.length - 1;
+	int middle = right / 2;
+	while(left <= right && !arraySorted[middle].equals(key)) {
+		if (comp.compare(key,arraySorted[middle]) < 0) {
+			right = middle - 1;
+		} else {
+			left = middle + 1;
+		}
+		middle = (left + right) / 2;
+	}
+	return left > right ? -left - 1 : middle;
+}
+
 }
