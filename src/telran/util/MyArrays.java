@@ -71,6 +71,20 @@ private static <T> int getCountPredicate(T[] array, Predicate<T> predicate) {
 	
 	return res;
 }
+public static <T> T[] removeIf(T[] array, Predicate<T> predicate) {
+	//TODO
+	//one code line with no additional methods
+	return null;
+}
+public static <T> T[] removeRepeated(T[] array) {
+	//TODO
+	//try to write this method based on removeIf
+	return null;
+}
+public static <T> boolean contains(T[] array, T pattern) {
+	//TODO returns true if element equaled to pattern exists in array
+	return false;
+}
 
 
 
