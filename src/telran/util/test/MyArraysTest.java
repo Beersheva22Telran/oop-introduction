@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.function.Predicate;
 
 import org.junit.Ignore;
 import org.junit.jupiter.api.Disabled;
@@ -50,5 +51,18 @@ class MyArraysTest {
 		assertEquals(-5, MyArrays.binarySearch(strings, "lmn", comp));
 	}
 	@Test
+	void filterTest() {
+		int dividor = 2;
+		String subStr = "m";
+		Predicate<Integer> predEven = new DividorPredicate(dividor);
+		Predicate<String> predSubstr = new SubstrPredicate(subStr);
+		String expectedStr[] = {
+				 "abm", "abmb", "abmbc"	
+			};
+		Integer expectedNumbers[] ={2, -8, 100, 10};
+		assertArrayEquals(expectedStr, MyArrays.filter(strings, predSubstr));
+		assertArrayEquals(expectedNumbers, MyArrays.filter(numbers, predEven));
+		
+	}
 
 }
