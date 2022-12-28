@@ -47,9 +47,9 @@ public static <T> int binarySearch(T[] arraySorted, T key, Comparator<T> comp) {
 }
 
 public static<T> T[] filter(T[] array, Predicate<T> predicate) {
-	int countPredicate = getCountPredicate(array, predicate);
 	
-	T[] res = Arrays.copyOf(array, countPredicate);
+	
+	T[] res = Arrays.copyOf(array, array.length);
 	int index = 0;
 	for(T element: array) {
 		if(predicate.test(element)) {
@@ -57,34 +57,50 @@ public static<T> T[] filter(T[] array, Predicate<T> predicate) {
 		}
 	}
 	
+	return Arrays.copyOf(res, index);
+}
+
+
+public static <T> T[] removeIf(T[] array, Predicate<T> predicate) {
+	
+	return filter(array, predicate.negate());
+}
+public static <T> T[] removeRepeated(T[] array) {
+	final Object helper[] = new Object[array.length];
+	final int index[] = {0};
+	return removeIf(array, element -> {
+		boolean res = true;
+		if (!contains(helper, element)) {
+			helper[index[0]++] = element;
+			res = false;
+		}
+		return res;
+	});
+}
+public static <T> boolean contains(T[] array, T pattern) {
+	int index = 0;
+	while(index < array.length && !isEqual(array[index], pattern)) {
+		index++;
+	}
+	
+	return index < array.length;
+}
+static private boolean isEqual(Object element, Object pattern) {
+	return element == null ? element == pattern : element.equals(pattern);
+}
+public static <T> String join(T[] array, String delimiter) {
+	String res = "";
+	if (array.length > 0) {
+		StringBuilder builder = new StringBuilder(array[0].toString());
+		for (int i = 1; i < array.length; i++) {
+			builder.append(delimiter).append(array[i]);
+		}
+		res = builder.toString();
+	}
 	return res;
 }
 
-private static <T> int getCountPredicate(T[] array, Predicate<T> predicate) {
-	int res = 0;
-	
-	for(T element: array) {
-		if(predicate.test(element)) {
-			res++;
-		}
-	}
-	
-	return res;
-}
-public static <T> T[] removeIf(T[] array, Predicate<T> predicate) {
-	//TODO
-	//one code line with no additional methods
-	return null;
-}
-public static <T> T[] removeRepeated(T[] array) {
-	//TODO
-	//try to write this method based on removeIf
-	return null;
-}
-public static <T> boolean contains(T[] array, T pattern) {
-	//TODO returns true if element equaled to pattern exists in array
-	return false;
-}
+
 
 
 
