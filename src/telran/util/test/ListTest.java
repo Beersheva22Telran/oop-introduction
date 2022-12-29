@@ -88,5 +88,10 @@ public abstract class ListTest extends CollectionTest {
 		list.set(0, 1000);
 		assertEquals(1000, list.get(0));
 	}
+	@Test
+	@Override
+	void testIterator() {
+		//TODO
+	}
 
 }

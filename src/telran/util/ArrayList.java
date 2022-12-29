@@ -1,12 +1,28 @@
 package telran.util;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.function.Predicate;
 
 public class ArrayList<T> implements List<T> {
 	static final int DEFAULT_CAPACITY = 16;
 private T [] array;
 private int size;
+private class ArrayListIterator implements Iterator<T> {
+//TODO
+	@Override
+	public boolean hasNext() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public T next() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+}
 @SuppressWarnings("unchecked")
 public ArrayList(int capacity) {
 	array = (T[])new Object[capacity];
@@ -39,6 +55,7 @@ public ArrayList() {
 
 	@Override
 	public boolean removeIf(Predicate<T> predicate) {
+		//FIXME - write implementation of O[N]. Hint working with only indexes
 		int oldSize = size;
 		for (int i = size - 1; i >= 0; i--) {
 			if (predicate.test(array[i])) {
@@ -46,6 +63,7 @@ public ArrayList() {
 			}
 		}
 		return oldSize > size;
+		
 	}
 
 	@Override
@@ -138,6 +156,11 @@ public ArrayList() {
 		checkIndex(index, false);
 		array[index] = element;
 
+	}
+	@Override
+	public Iterator<T> iterator() {
+		
+		return new ArrayListIterator();
 	}
 
 }

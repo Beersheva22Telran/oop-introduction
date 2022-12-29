@@ -27,6 +27,7 @@ public abstract class CollectionTest {
 	}
 
 	abstract void testAdd();
+	abstract void testIterator();
 	
 
 	@Test
