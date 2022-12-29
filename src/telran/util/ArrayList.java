@@ -7,6 +7,7 @@ public class ArrayList<T> implements List<T> {
 	static final int DEFAULT_CAPACITY = 16;
 private T [] array;
 private int size;
+@SuppressWarnings("unchecked")
 public ArrayList(int capacity) {
 	array = (T[])new Object[capacity];
 }
@@ -27,20 +28,30 @@ public ArrayList() {
 
 	@Override
 	public boolean remove(T pattern) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean res = false;
+		int index = indexOf(pattern);
+		if (index > -1) {
+			res = true;
+			remove(index);
+		}
+		return res;
 	}
 
 	@Override
 	public boolean removeIf(Predicate<T> predicate) {
-		// TODO Auto-generated method stub
-		return false;
+		int oldSize = size;
+		for (int i = size - 1; i >= 0; i--) {
+			if (predicate.test(array[i])) {
+				remove(i);
+			}
+		}
+		return oldSize > size;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return size == 0;
 	}
 
 	@Override
@@ -51,49 +62,81 @@ public ArrayList() {
 
 	@Override
 	public boolean contains(T pattern) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return indexOf(pattern) > -1;
 	}
 
 	@Override
 	public T[] toArray(T[] ar) {
-		// TODO Auto-generated method stub
-		return null;
+		if(ar.length < size) {
+			ar = Arrays.copyOf(array, size);
+		}
+		System.arraycopy(array, 0, ar, 0, size);
+		Arrays.fill(ar, size, ar.length, null);
+		return ar;
 	}
 
 	@Override
 	public void add(int index, T element) {
-		// TODO Auto-generated method stub
+		checkIndex(index, true);
+		if (size == array.length) {
+			reallocate();
+		}
+		System.arraycopy(array, index, array, index + 1, size - index);
+		array[index] = element;
+		size++;
 
 	}
 
 	@Override
 	public T remove(int index) {
-		// TODO Auto-generated method stub
-		return null;
+		checkIndex(index, false);
+		T res = array[index];
+		array[index] = null;
+		size--;
+		System.arraycopy(array, index + 1, array, index, size - index);
+		return res;
 	}
 
 	@Override
 	public int indexOf(T pattern) {
-		// TODO Auto-generated method stub
-		return 0;
+		int index = 0;
+		while(index < size && !isEqual(array[index], pattern)) {
+			index++;
+		}
+		return index < size ? index : -1;
 	}
 
+	private boolean isEqual(T element, T pattern) {
+		
+		return element == null  ? element == pattern : element.equals(pattern);
+	}
 	@Override
 	public int lastIndexOf(T pattern) {
-		// TODO Auto-generated method stub
-		return 0;
+		int index = size - 1;
+		while(index >= 0 && !isEqual(array[index], pattern)) {
+			index--;
+		}
+		return index;
 	}
 
 	@Override
 	public T get(int index) {
-		// TODO Auto-generated method stub
-		return null;
+		checkIndex(index, false);
+		return array[index];
 	}
 
+	private void checkIndex(int index, boolean sizeIncluded) {
+		int sizeDelta = sizeIncluded ? 0 : 1;
+		if (index < 0 || index > size - sizeDelta) {
+			throw new IndexOutOfBoundsException(index);
+		}
+		
+	}
 	@Override
 	public void set(int index, T element) {
-		// TODO Auto-generated method stub
+		checkIndex(index, false);
+		array[index] = element;
 
 	}
 
