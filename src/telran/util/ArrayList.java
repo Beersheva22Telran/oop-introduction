@@ -92,9 +92,9 @@ public ArrayList() {
 	public T remove(int index) {
 		checkIndex(index, false);
 		T res = array[index];
-		array[index] = null;
 		size--;
 		System.arraycopy(array, index + 1, array, index, size - index);
+		array[size] = null;
 		return res;
 	}
 
