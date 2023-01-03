@@ -2,6 +2,7 @@ package telran.util;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 public class ArrayList<T> implements List<T> {
@@ -9,17 +10,19 @@ public class ArrayList<T> implements List<T> {
 private T [] array;
 private int size;
 private class ArrayListIterator implements Iterator<T> {
-//TODO
+int current = 0;
 	@Override
 	public boolean hasNext() {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return current < size;
 	}
 
 	@Override
 	public T next() {
-		// TODO Auto-generated method stub
-		return null;
+		if(!hasNext()) {
+			throw new NoSuchElementException();
+		}
+		return array[current++];
 	}
 	
 }
@@ -55,13 +58,16 @@ public ArrayList() {
 
 	@Override
 	public boolean removeIf(Predicate<T> predicate) {
-		//FIXME - write implementation of O[N]. Hint working with only indexes
 		int oldSize = size;
-		for (int i = size - 1; i >= 0; i--) {
+		int tIndex = 0;
+		for (int i = 0; i < oldSize; i++) {
 			if (predicate.test(array[i])) {
-				remove(i);
+				size--;
+			} else {
+				array[tIndex++] = array[i];
 			}
 		}
+		Arrays.fill(array, size, oldSize, null);
 		return oldSize > size;
 		
 	}
@@ -78,11 +84,7 @@ public ArrayList() {
 		return size;
 	}
 
-	@Override
-	public boolean contains(T pattern) {
-		
-		return indexOf(pattern) > -1;
-	}
+	
 
 	@Override
 	public T[] toArray(T[] ar) {
@@ -144,13 +146,7 @@ public ArrayList() {
 		return array[index];
 	}
 
-	private void checkIndex(int index, boolean sizeIncluded) {
-		int sizeDelta = sizeIncluded ? 0 : 1;
-		if (index < 0 || index > size - sizeDelta) {
-			throw new IndexOutOfBoundsException(index);
-		}
-		
-	}
+	
 	@Override
 	public void set(int index, T element) {
 		checkIndex(index, false);
