@@ -2,14 +2,15 @@ package telran.util;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
-public class LinkedList<T> implements List<T> {
+public class LinkedList<T> extends AbstractCollection<T> implements List<T> {
 	private static class Node<T> {
 		T obj;
 		Node<T> prev;
 		Node<T> next;
-
+		
 		Node(T obj) {
 			this.obj = obj;
 		}
@@ -17,20 +18,35 @@ public class LinkedList<T> implements List<T> {
 
 	private Node<T> head;
 	private Node<T> tail;
-	private int size;
+
 
 	private class LinkedListIterator implements Iterator<T> {
-//TODO
+		Node<T> current = head;
+		boolean flNext = false;
 		@Override
 		public boolean hasNext() {
-			// TODO Auto-generated method stub
-			return false;
+			
+			return current != null;
 		}
 
 		@Override
 		public T next() {
-			// TODO Auto-generated method stub
-			return null;
+			if(!hasNext()) {
+				throw new NoSuchElementException();
+			}
+			T res = current.obj;
+			current = current.next;
+			flNext = true;
+			return res;
+		}
+		@Override
+		public void remove() {
+			if(!flNext) {
+				throw new IllegalStateException();
+			}
+			Node<T> removedNode = current == null ? tail : current.prev;
+			removeNode(removedNode);
+			flNext = false;
 		}
 
 	}
@@ -50,31 +66,54 @@ public class LinkedList<T> implements List<T> {
 		return true;
 	}
 
-	@Override
-	public boolean remove(T pattern) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean removeIf(Predicate<T> predicate) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		
-		return size == 0;
-	}
-
-	@Override
-	public int size() {
-		
-		return size;
-	}
-
 	
+
+//	
+
+	private void removeNode(Node<T> current) {
+		if (current == head) {
+			removeHead();
+		} else if (current == tail) {
+			removeTail();
+		} else {
+			removeMiddle(current);
+		}
+		size--;
+		
+	}
+
+
+
+	private void removeMiddle(Node<T> current) {
+		Node<T> prev = current.prev;
+		Node<T> next = current.next;
+		prev.next = next;
+		next.prev = prev;
+		
+	}
+
+
+
+	private void removeTail() {
+		Node<T> prev = tail.prev;
+		prev.next = null;
+		tail = prev;
+		
+	}
+
+
+
+	private void removeHead() {
+		if (head.next == null) {
+			head = tail = null;
+		} else {
+			Node<T> next = head.next;
+			next.prev = null;
+			head = next;
+		}
+		
+	}
+
 
 	@Override
 	public T[] toArray(T[] ar) {
@@ -92,8 +131,8 @@ public class LinkedList<T> implements List<T> {
 
 	@Override
 	public Iterator<T> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return new LinkedListIterator();
 	}
 
 	@Override
@@ -121,6 +160,23 @@ public class LinkedList<T> implements List<T> {
 		
 		
 	}
+	/************************************************************************************/
+	//Comments only for LinkedList task of loop existence
+	public void setNext(int index1, int index2) {
+		//sets next of element at index1 to element at index2
+		if (index1 < index2) {
+			throw new IllegalArgumentException();
+		}
+	}
+	public boolean hasLoop() {
+		//TODO
+		//method returns true if there is loop by next reference referring to a previous element
+		// use neither "size" nor "size()"
+		// no use prev filed in a Node
+		// O[N]  with no using collections
+		return false;
+	}
+	/*********************************************************************************************/
 
 	private Node<T> getNode(int index) {
 		
@@ -154,20 +210,35 @@ public class LinkedList<T> implements List<T> {
 
 	@Override
 	public T remove(int index) {
-		// TODO Auto-generated method stub
-		return null;
+		checkIndex(index, false);
+		Node<T> removedNode = getNode(index);
+		if (removedNode == null) {
+			throw new IllegalStateException("removedNode in method remove is null");
+		}
+		removeNode(removedNode);
+		return removedNode.obj;
 	}
 
 	@Override
 	public int indexOf(T pattern) {
-		// TODO Auto-generated method stub
-		return 0;
+		Node<T> current = head;
+		int index = 0;
+		while(current != null && !isEqual(current.obj, pattern)) {
+			index++;
+			current = current.next;
+		}
+		return current != null ? index : -1;
 	}
 
 	@Override
 	public int lastIndexOf(T pattern) {
-		// TODO Auto-generated method stub
-		return 0;
+		Node<T> current = tail;
+		int index = size - 1;
+		while(current != null && !isEqual(current.obj, pattern)) {
+			index--;
+			current = current.prev;
+		}
+		return index;
 	}
 
 	@Override
