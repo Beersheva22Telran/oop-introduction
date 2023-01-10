@@ -70,23 +70,16 @@ public class LinkedList<T> extends AbstractCollection<T> implements List<T> {
 
 //	
 
-	private void removeNode(Node<T> node) {
-		Node<T> next = node.next;
-		Node<T> prev = node.prev;
-		if (prev == null) {
-			head = next;
+	private void removeNode(Node<T> current) {
+		if (current == head) {
+			removeHead();
+		} else if (current == tail) {
+			removeTail();
 		} else {
-			prev.next = next;
-			node.prev = null;
+			removeMiddle(current);
 		}
 
-		if (next == null) {
-			tail = prev;
-		} else {
-			next.prev = prev;
-			node.next = null;
-		}
-		node.obj = null;
+		
 		size--;
 		
 	}
