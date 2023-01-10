@@ -1,4 +1,5 @@
 package telran.util;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.*;
 
@@ -30,5 +31,17 @@ boolean contains(T pattern);
  * if ar refers to memory that is greater than required for all elements of Collection then all elements of the 
  * Collection will be put in the array and rest of memory will be filled by null's 
  */
-T[] toArray(T[]ar);
+ 
+default T[] toArray(T[] ar) {
+	int size = size();
+	if (ar.length < size) {
+		ar = Arrays.copyOf(ar, size);
+	}
+	int index = 0;
+	for(T obj: this) {
+		ar[index++] = obj;
+	}
+	Arrays.fill(ar, size, ar.length, null);
+	return ar;
+}
 }
