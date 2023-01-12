@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import telran.util.*;
 
-public class SetTest extends CollectionTest {
+public abstract class SetTest extends CollectionTest {
 	Set<Integer> set ;
 	@BeforeEach
 	void setUp() throws Exception {
@@ -23,10 +23,5 @@ public class SetTest extends CollectionTest {
 
 	}
 
-	@Override
-	void testIterator() {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 }
