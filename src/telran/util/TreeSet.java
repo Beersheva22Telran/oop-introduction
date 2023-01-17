@@ -2,8 +2,9 @@ package telran.util;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class TreeSet<T> extends AbstractCollection<T> implements Set<T> {
+public class TreeSet<T> extends AbstractCollection<T> implements Sorted<T> {
    static private class Node<T> {
 	   T obj;
 	   Node<T> parent;
@@ -14,17 +15,26 @@ public class TreeSet<T> extends AbstractCollection<T> implements Set<T> {
 	   }
    }
    private class TreeSetIterator implements Iterator<T> {
-//TODO
+	   Node<T> current = root;
+	   TreeSetIterator() {
+		   if (current != null) {
+			   current = getLeastNode(current);
+		   }
+	   }
 	@Override
 	public boolean hasNext() {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return current != null;
 	}
 
 	@Override
 	public T next() {
-		// TODO Auto-generated method stub
-		return null;
+		if (!hasNext()) {
+			throw new NoSuchElementException();
+		}
+		T res = current.obj;
+		current = getNextCurrent(current);
+		return res;
 	}
 	   
    }
@@ -33,16 +43,60 @@ public class TreeSet<T> extends AbstractCollection<T> implements Set<T> {
    public TreeSet(Comparator<T> comp) {
 	   this.comp = comp;
    }
-   @SuppressWarnings("unchecked")
+   private Node<T> getNextCurrent(Node<T> current) {
+	
+	return current.right == null ? getGreaterParent(current) : getLeastNode(current.right);
+}
+private Node<T> getGreaterParent(Node<T> current) {
+	while(current.parent != null && current.parent.left != current) {
+		current = current.parent;
+	}
+	return current.parent;
+}
+private Node<T> getLeastNode(Node<T> current) {
+	while(current.left != null) {
+		current = current.left;
+	}
+	return current;
+}
+@SuppressWarnings("unchecked")
 public TreeSet() {
 	   this((Comparator<T>) Comparator.naturalOrder());
    }
 	@Override
 	public boolean add(T element) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean res = false;
+		Node<T> parent = getNode(element);
+		int compRes = 0;
+		if(parent == null || (compRes = comp.compare(element, parent.obj)) != 0) {
+			res  = true;
+			size++;
+			Node<T> node = new Node<>(element);
+			node.parent = parent;
+			if(parent == null) {
+				root = node;
+			} else {
+				if (compRes < 0) {
+					parent.left = node;
+				} else {
+					parent.right = node;
+				}
+			}
+		}
+		
+		return res;
 	}
 
+	private Node<T> getNode(T element) {
+		Node<T> current = root;
+		Node<T> parent = null;
+		int compRes;
+		while(current != null && (compRes = comp.compare(element, current.obj)) != 0) {
+			parent = current;
+			current = compRes < 0 ? current.left : current.right;
+		}
+		return current == null ? parent : current;
+	}
 	@Override
 	public boolean remove(T pattern) {
 		// Not implemented yet
@@ -51,14 +105,34 @@ public TreeSet() {
 
 	@Override
 	public boolean contains(T pattern) {
-		// TODO Auto-generated method stub
-		return false;
+		Node<T> node = getNode(pattern);
+		return node != null && comp.compare(pattern, node.obj) == 0;
 	}
 
 	@Override
 	public Iterator<T> iterator() {
 		
 		return new TreeSetIterator();
+	}
+	@Override
+	public T floor(T element) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public T ceiling(T element) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public T first() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public T last() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
