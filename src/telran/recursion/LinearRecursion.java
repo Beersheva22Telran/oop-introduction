@@ -40,5 +40,19 @@ public static void reverse(int ar[]) {
 	//no cycles
 	//no static fields
 	//TODO reversing elements of the source array
+	reverse(0, ar.length - 1, ar);
+}
+private static void reverse(int firstIndex, int lastIndex, int[] ar) {
+	if (firstIndex < lastIndex) {
+		swap(ar, firstIndex, lastIndex);
+		reverse(firstIndex + 1, lastIndex - 1, ar);
+	}
+	
+}
+private static void swap(int[] ar, int firstIndex, int lastIndex) {
+	int tmp = ar[firstIndex];
+	ar[firstIndex] = ar[lastIndex];
+	ar[lastIndex] = tmp;
+	
 }
 }

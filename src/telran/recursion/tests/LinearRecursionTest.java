@@ -38,8 +38,13 @@ void sumTest() {
 void reverseTest() {
 	int ar[] = {1, 2, 3, 4, 5, 6};
 	int expected[] = {6, 5, 4, 3, 2, 1};
+	int ar1[] = {1, 2, 3, 4, 5, 6, 7};
+	int expected1[] = {7, 6, 5, 4, 3, 2, 1};
 	reverse(ar);
+	reverse (ar1);
 	assertArrayEquals(expected, ar);
+	assertArrayEquals(expected1, ar1);
+	
 	
 }
 }
