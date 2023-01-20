@@ -55,4 +55,13 @@ private static void swap(int[] ar, int firstIndex, int lastIndex) {
 	ar[lastIndex] = tmp;
 	
 }
+public static boolean isSubstring(String str, String substr) {
+	// TODO write function
+	//  returns true if a given 'substr' is indeed the substring of a given
+	// 'string'.
+	// Challenges: 1. To apply only following methods of the class String:
+	// charAt(int ind); String substring(int ind); int length();
+	// 2. No cycles;
+	return false;
+}
 }
