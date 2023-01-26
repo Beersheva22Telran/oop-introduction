@@ -246,12 +246,71 @@ public TreeSet() {
 		
 	}
 	public int width() {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return width(root);
+	}
+	private int width(Node<T> root) {
+		int res = 0;
+		if (root != null) {
+			if (root.left == null && root.right == null) {
+				res = 1;
+			} else {
+				res = width(root.left) + width(root.right);
+			}
+				
+		}
+		
+		return res;
 	}
 	public void inversion() {
-		// TODO Auto-generated method stub
+		inversion(root);
+		comp = comp.reversed();
 		
 	}
+	private void inversion(Node<T> root) {
+		if (root != null) {
+			inversion(root.left);
+			inversion(root.right);
+			swap(root);
+		}
+		
+	}
+	private void swap(Node<T> root) {
+		Node<T> tmp = root.left;
+		root.left = root.right;
+		root.right = tmp;
+		
+	}
+	public void balance() {
+		Node<T>[] array = getNodesArray();
+		root = balance(array, 0, array.length - 1, null);
+		
+	}
+	private Node<T> balance(Node<T>[] array, int left, int right, Node<T>parent) {
+		Node<T> root = null;
+		if (left <= right) {
+			final int rootIndex = (left + right) / 2;
+			root = array[rootIndex];
+			root.parent = parent;
+			root.left = balance(array, left, rootIndex - 1, root);
+			root.right = balance(array, rootIndex + 1, right, root);
+		}
+		return root;
+	}
+	@SuppressWarnings("unchecked")
+	private Node<T>[] getNodesArray() {
+		Node<T> res[] = new Node[size];
+		int index = 0;
+		if (root != null) {
+			Node<T> current = getLeastNode(root);
+			while (current != null) {
+				res[index++] = current;
+				current = getNextCurrent(current);
+			} 
+		}
+		return res;
+	}
+	
+	
 
 }
