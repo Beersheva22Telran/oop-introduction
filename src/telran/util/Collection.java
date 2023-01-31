@@ -2,6 +2,8 @@ package telran.util;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.*;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public interface Collection<T> extends Iterable<T>{
 boolean add (T element);
@@ -43,5 +45,16 @@ default T[] toArray(T[] ar) {
 	}
 	Arrays.fill(ar, size, ar.length, null);
 	return ar;
+}
+default Stream<T> stream() {
+	return StreamSupport.stream(this.spliterator(), false);
+}
+default Stream<T> parallelStream() {
+	return StreamSupport.stream(this.spliterator(), true);
+}
+default T[] toArrayShuffling(T[] array) {
+	//TODO
+	//return array with collection elements in shuffled order
+	return null;
 }
 }
