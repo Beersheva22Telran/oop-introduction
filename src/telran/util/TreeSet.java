@@ -310,6 +310,11 @@ public TreeSet() {
 		}
 		return res;
 	}
+	@Override
+	public T get(T pattern) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 
