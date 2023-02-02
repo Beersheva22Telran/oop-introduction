@@ -1,6 +1,7 @@
 package telran.util;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.function.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -53,8 +54,11 @@ default Stream<T> parallelStream() {
 	return StreamSupport.stream(this.spliterator(), true);
 }
 default T[] toArrayShuffling(T[] array) {
-	//TODO
-	//return array with collection elements in shuffled order
-	return null;
+	T[] ar1 = toArray(array);
+	T[] res = Arrays.copyOf(ar1, ar1.length);
+	int[] index = {0};
+	new Random().ints(0, res.length).distinct().limit(res.length)
+	.forEach(i -> res[index[0]++] = ar1[i]);
+	return res;
 }
 }
