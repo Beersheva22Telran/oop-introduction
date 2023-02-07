@@ -312,8 +312,11 @@ public TreeSet() {
 	}
 	@Override
 	public T get(T pattern) {
-		// TODO Auto-generated method stub
-		return null;
+		T res = floor(pattern);
+		if (!isEqual(res, pattern)) {
+			res = null;
+		}
+		return res;
 	}
 	
 	

@@ -17,11 +17,7 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
 		return res;
 	}
 
-	@Override
-	public V putIfAbsent(K key, V value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public V get(K key) {
@@ -33,28 +29,25 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
 		return res;
 	}
 
-	@Override
-	public V getOrDefault(K key, V value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public boolean containsKey(K key) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return set.contains(new Entry<>(key, null));
 	}
 
 	@Override
 	public boolean containsValue(V value) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return set.stream().anyMatch(e -> e.getValue().equals(value));
 	}
 
 	@Override
 	public Collection<V> values() {
-		// TODO Auto-generated method stub
-		return null;
+		List<V> res = new ArrayList<>();
+		set.forEach(e -> res.add(e.getValue()));
+		return res;
 	}
 
 	@Override
@@ -62,7 +55,7 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
 		try {
 			@SuppressWarnings("unchecked")
 			Set<K> res = set.getClass().getConstructor().newInstance();
-			//TODO complete code
+			set.forEach(e -> res.add(e.getKey()));
 			return res;
 		} catch (Exception e) {
 			throw new IllegalStateException();
@@ -75,7 +68,7 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
 		try {
 			@SuppressWarnings("unchecked")
 			Set<Entry<K, V>> res = set.getClass().getConstructor().newInstance();
-			//TODO complete code
+			set.forEach(res::add);
 			return res;
 		} catch (Exception e) {
 			throw new IllegalStateException();
@@ -84,8 +77,11 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
 
 	@Override
 	public V remove(K key) {
-		// TODO Auto-generated method stub
-		return null;
+		V res = get(key);
+		if (res != null) {
+			set.remove(new Entry<>(key, null));
+		}
+		return res;
 	}
 
 }
