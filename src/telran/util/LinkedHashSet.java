@@ -2,36 +2,74 @@ package telran.util;
 
 import java.util.Iterator;
 
+import telran.util.LinkedList.Node;
+
 public class LinkedHashSet<T> extends AbstractCollection<T> implements Set<T> {
-//TODO
+	private LinkedList<T> list = new LinkedList<>();
+	private HashMap<T, Node<T>> map = new HashMap<>();
+	private class LinkedHashSetIterator implements Iterator<T> {
+		Iterator<T> listIterator = list.iterator();
+		T currentObj = null;
+		@Override
+		public boolean hasNext() {
+			
+			return listIterator.hasNext();
+		}
+
+		@Override
+		public T next() {
+			currentObj = listIterator.next();
+			return currentObj;
+		}
+		@Override
+		public void remove() {
+			listIterator.remove();
+			map.remove(currentObj);
+			size--;
+		}
+	}
 	@Override
 	public boolean add(T element) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean res = false;
+		if (!map.containsKey(element)) {
+			res = true;
+			list.add(element);
+			map.put(element, list.tail);
+			size++;
+		}
+		return res;
 	}
 
 	@Override
 	public boolean remove(T pattern) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean res = false;
+		Node<T> node = map.get(pattern);
+		if (node != null) {
+			res = true;
+			list.removeNode(node);
+			map.remove(pattern);
+			size--;
+			
+		}
+		return res;
 	}
 
 	@Override
 	public boolean contains(T pattern) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return map.containsKey(pattern);
 	}
 
 	@Override
 	public Iterator<T> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return new LinkedHashSetIterator();
 	}
 
 	@Override
 	public T get(T pattern) {
-		// TODO Auto-generated method stub
-		return null;
+		Node<T> node = map.get(pattern);
+		return node == null ? null : node.obj;
 	}
 
 }
